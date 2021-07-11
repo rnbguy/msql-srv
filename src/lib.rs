@@ -276,12 +276,12 @@ impl<B: MysqlShim<W>, R: Read, W: Write> MysqlIntermediary<B, R, W> {
                         "client sent incomplete handshake",
                     ),
                     nom::Err::Failure(nom_error) | nom::Err::Error(nom_error) => {
-                        if let nom::error::ErrorKind::Eof = nom_error.code {
+                        if let nom::error::ErrorKind::Eof = nom_error.1 {
                             io::Error::new(
                                 io::ErrorKind::UnexpectedEof,
                                 format!(
                                     "client did not complete handshake; got {:?}",
-                                    nom_error.input
+                                    nom_error.0
                                 ),
                             )
                         } else {
@@ -289,7 +289,7 @@ impl<B: MysqlShim<W>, R: Read, W: Write> MysqlIntermediary<B, R, W> {
                                 io::ErrorKind::InvalidData,
                                 format!(
                                     "bad client handshake; got {:?} ({:?})",
-                                    nom_error.input, nom_error.code
+                                    nom_error.0, nom_error.1
                                 ),
                             )
                         }
