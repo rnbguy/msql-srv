@@ -14,7 +14,7 @@ pub fn client_handshake(i: &[u8]) -> nom::IResult<&[u8], ClientHandshake<'_>> {
 
     let (i, cap) = nom::number::complete::le_u16(i)?;
 
-    if CapabilityFlags::from_bits_truncate(cap as u32).contains(CapabilityFlags::CLIENT_PROTOCOL_41)
+    if !CapabilityFlags::from_bits_truncate(cap as u32).contains(CapabilityFlags::CLIENT_PROTOCOL_41)
     {
         // HandshakeResponse41
         let (i, cap2) = nom::number::complete::le_u16(i)?;

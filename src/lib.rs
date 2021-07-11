@@ -241,9 +241,11 @@ impl<B: MysqlShim<W>, R: Read, W: Write> MysqlIntermediary<B, R, W> {
         let mut capabilities = CapabilityFlags::empty();
         capabilities.insert(CapabilityFlags::CLIENT_PROTOCOL_41);
         capabilities.insert(CapabilityFlags::CLIENT_RESERVED);
-        capabilities.insert(CapabilityFlags::CLIENT_SECURE_CONNECTION);
-        capabilities.insert(CapabilityFlags::CLIENT_PLUGIN_AUTH);
+        // capabilities.insert(CapabilityFlags::CLIENT_SECURE_CONNECTION);
+        // capabilities.insert(CapabilityFlags::CLIENT_PLUGIN_AUTH);
         let capabilities_bytes = capabilities.bits().to_le_bytes();
+
+        println!("caps {:x?}", capabilities_bytes);
 
         // 5.1.10 because that's what Ruby's ActiveRecord requires
         self.writer.write_all(&b"5.1.10-alpha-msql-proxy\0"[..])?;
